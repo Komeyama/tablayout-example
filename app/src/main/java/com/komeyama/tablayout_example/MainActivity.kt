@@ -14,15 +14,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val adapter = GroupAdapter<GroupieViewHolder>()
-
         adapter.add(SimpleListItem("dummy01"))
         adapter.add(SimpleListItem("dummy02"))
         adapter.add(SimpleListItem("dummy03"))
         adapter.add(SimpleListItem("dummy04"))
         adapter.add(SimpleListItem("dummy05"))
-
         recycler_view.adapter = adapter
 
+        mutableListOf(1, 2, 3, 4, 5).forEach {
+            tab_layout.addTab(tab_layout.newTab().setText("sample_0$it"))
+        }
     }
 }
 
