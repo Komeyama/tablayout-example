@@ -14,11 +14,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val adapter = GroupAdapter<GroupieViewHolder>()
-        adapter.add(SimpleListItem("dummy01"))
-        adapter.add(SimpleListItem("dummy02"))
-        adapter.add(SimpleListItem("dummy03"))
-        adapter.add(SimpleListItem("dummy04"))
-        adapter.add(SimpleListItem("dummy05"))
+        for (i in 1..20) {
+            adapter.add(SimpleListItem("dummy_0$i"))
+        }
         recycler_view.adapter = adapter
 
         mutableListOf(1, 2, 3, 4, 5).forEach {
