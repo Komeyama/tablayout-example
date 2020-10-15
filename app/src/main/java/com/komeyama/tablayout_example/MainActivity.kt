@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = GroupAdapter<GroupieViewHolder>()
         for (i in 1..20) {
-            adapter.add(SimpleListItem("dummy_0$i"))
+            adapter.add(SimpleListItem("dummy_0$i", tab_layout))
         }
         recycler_view.adapter = adapter
 
@@ -38,10 +38,12 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class SimpleListItem(private val text: String) : Item<GroupieViewHolder>() {
+class SimpleListItem(private val text: String, private val tabLayout: TabLayout) :
+    Item<GroupieViewHolder>() {
     override fun getLayout() = R.layout.item_simple
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.dummy_text.text = text
+        Timber.d("bind tab layout %s", tabLayout)
     }
 }
