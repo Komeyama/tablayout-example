@@ -1,7 +1,10 @@
 package com.komeyama.tablayout_example
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -10,15 +13,23 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_simple.view.*
 import timber.log.Timber
 
+
 class MainActivity : AppCompatActivity() {
+
+    private var halfWidth = 0
+    private var changeTabIndex = 5
+    private var listSize = 20
+    private var labelWidth = 358
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Timber.plant(Timber.DebugTree())
+        halfWidth = getScreenWidth() / 2
 
         val adapter = GroupAdapter<GroupieViewHolder>()
-        for (i in 1..20) {
-            adapter.add(SimpleListItem("dummy_0$i", tab_layout))
+        for (i in 1..listSize) {
+            adapter.add(SimpleListItem("dummy_$i", tab_layout, this))
         }
         recycler_view.adapter = adapter
 
@@ -35,15 +46,51 @@ class MainActivity : AppCompatActivity() {
                 Timber.d("on tab selected %s", p0)
             }
         })
+
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var scrollDx = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                scrollDx += dx
+                val changeTabPosition = ((358 * (changeTabIndex - 1)) / 2) + (358 * (changeTabIndex - 1) % halfWidth) / 2
+                if (scrollDx > (changeTabIndex * labelWidth - changeTabPosition) && scrollDx < (2 * changeTabIndex * labelWidth - changeTabPosition)) {
+                    Timber.d("change tab %s !", changeTabIndex)
+                }
+
+                if (scrollDx > (2 * changeTabIndex * labelWidth - changeTabPosition) &&  scrollDx < (3 * changeTabIndex * labelWidth - changeTabPosition)) {
+                    Timber.d("change tab %s !", 2 * changeTabIndex)
+                }
+
+                if (scrollDx > (3 * changeTabIndex * labelWidth - changeTabPosition) &&  scrollDx < (4 * changeTabIndex * labelWidth - changeTabPosition)) {
+                    Timber.d("change tab %s !", 3 * changeTabIndex)
+                }
+
+                if (scrollDx > (4 * changeTabIndex * labelWidth - changeTabPosition)) {
+                    Timber.d("change tab %s !", 4 * changeTabIndex)
+                }
+            }
+        })
+    }
+
+    private fun getScreenWidth(): Int {
+        val displayMetrics = DisplayMetrics()
+        this.display?.getRealMetrics(displayMetrics)
+        return displayMetrics.widthPixels
     }
 }
 
-class SimpleListItem(private val text: String, private val tabLayout: TabLayout) :
+class SimpleListItem(
+    private val text: String,
+    private val tabLayout: TabLayout,
+    private val context: Context
+) :
     Item<GroupieViewHolder>() {
     override fun getLayout() = R.layout.item_simple
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.dummy_text.text = text
-        Timber.d("bind tab layout %s", tabLayout)
+        val width = viewHolder.root.dummy_text.layoutParams.width
+        Timber.d("item width px: %s", width)
     }
 }
