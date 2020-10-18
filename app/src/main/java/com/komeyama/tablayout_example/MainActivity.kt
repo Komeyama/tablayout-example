@@ -2,6 +2,7 @@ package com.komeyama.tablayout_example
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -54,20 +55,55 @@ class MainActivity : AppCompatActivity() {
                 super.onScrolled(recyclerView, dx, dy)
                 scrollDx += dx
                 val changeTabPosition = ((358 * (changeTabIndex - 1)) / 2) + (358 * (changeTabIndex - 1) % halfWidth) / 2
+                if (scrollDx < (changeTabIndex * labelWidth - changeTabPosition)) {
+                    Timber.d("change tab %s !", changeTabIndex)
+                    Handler().postDelayed(
+                        {
+                            tab_layout.isSmoothScrollingEnabled = true
+                            tab_layout.setScrollPosition(0, 0f, true)
+                        }, 100
+                    )
+                }
+
+
                 if (scrollDx > (changeTabIndex * labelWidth - changeTabPosition) && scrollDx < (2 * changeTabIndex * labelWidth - changeTabPosition)) {
                     Timber.d("change tab %s !", changeTabIndex)
+                    Handler().postDelayed(
+                        {
+                            tab_layout.isSmoothScrollingEnabled = true
+                            tab_layout.setScrollPosition(1, 0f, true)
+                        }, 100
+                    )
                 }
 
                 if (scrollDx > (2 * changeTabIndex * labelWidth - changeTabPosition) &&  scrollDx < (3 * changeTabIndex * labelWidth - changeTabPosition)) {
                     Timber.d("change tab %s !", 2 * changeTabIndex)
+                    Handler().postDelayed(
+                        {
+                            tab_layout.isSmoothScrollingEnabled = true
+                            tab_layout.setScrollPosition(2, 0f, true)
+                        }, 100
+                    )
                 }
 
                 if (scrollDx > (3 * changeTabIndex * labelWidth - changeTabPosition) &&  scrollDx < (4 * changeTabIndex * labelWidth - changeTabPosition)) {
                     Timber.d("change tab %s !", 3 * changeTabIndex)
+                    Handler().postDelayed(
+                        {
+                            tab_layout.isSmoothScrollingEnabled = true
+                            tab_layout.setScrollPosition(3, 0f, true)
+                        }, 100
+                    )
                 }
 
                 if (scrollDx > (4 * changeTabIndex * labelWidth - changeTabPosition)) {
                     Timber.d("change tab %s !", 4 * changeTabIndex)
+                    Handler().postDelayed(
+                        {
+                            tab_layout.isSmoothScrollingEnabled = true
+                            tab_layout.setScrollPosition(4, 0f, true)
+                        }, 100
+                    )
                 }
             }
         })
